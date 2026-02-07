@@ -27,8 +27,7 @@ jobs:
     - name: Build debug APK
       run: |
         chmod +x ./gradlew
-        ./gradlew assembleDebug --no-daemon 2>&1 || true
-        ls -la app/build/outputs/apk/debug/ || echo "APK not found"
+        ./gradlew assembleDebug --no-daemon
         
     - name: Upload APK
       if: success()
