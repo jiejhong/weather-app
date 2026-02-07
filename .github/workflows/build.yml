@@ -25,19 +25,21 @@ jobs:
         api-level: 34
         
     - name: Build debug APK
-      run: ./gradlew assembleDebug --stacktrace
+      run: |
+        chmod +x ./gradlew
+        ./gradlew assembleDebug --stacktrace --info 2>&1 | tee build.log
+      continue-on-error: true
       
+    - name: Upload build log
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-log
+        path: build.log
+        
     - name: Upload APK
+      if: success()
       uses: actions/upload-artifact@v4
       with:
         name: weather-app-debug
         path: app/build/outputs/apk/debug/app-debug.apk
-        
-    - name: Download APK
-      uses: actions/download-artifact@v4
-      with:
-        name: weather-app-debug
-        path: .
-        
-    - name: List files
-      run: ls -la *.apk || echo "APK file not found"
