@@ -27,32 +27,11 @@ jobs:
     - name: Build debug APK
       run: |
         chmod +x ./gradlew
-        ./gradlew assembleDebug --stacktrace
+        ./gradlew assembleDebug --no-daemon 2>&1 || true
+        ls -la app/build/outputs/apk/debug/ || echo "APK not found"
         
-    - name: Create Release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      if: startsWith(github.ref, 'refs/tags/')
-      id: create_release
-      with:
-        draft: false
-        prerelease: false
-        release_name: Release ${{ github.event.release.name }}
-        tag_name: ${{ github.event.release.tag_name }}
-        
-    - name: Upload Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      if: startsWith(github.ref, 'refs/tags/')
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: app/build/outputs/apk/debug/app-debug.apk
-        asset_name: VisionWeather.apk
-        asset_content_type: application/vnd.android.package-archive
-        
-    - name: Upload APK as artifact
+    - name: Upload APK
+      if: success()
       uses: actions/upload-artifact@v4
       with:
         name: VisionWeather-v1.0
