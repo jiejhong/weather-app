@@ -1,1 +1,84 @@
-# Vision Weather App\n\n一个使用 Kotlin + Jetpack Compose 开发的天气应用程序。\n\n## 功能特点\n\n- 🌤️ 显示实时天气信息（温度、湿度、风速等）\n- 🔍 支持城市搜索\n- 📍 自动获取当前位置天气（默认上海）\n- 🎨 Material Design 3 现代UI设计\n- 🌙 支持深色模式\n\n## 技术栈\n\n- **语言**: Kotlin\n- **UI**: Jetpack Compose\n- **架构**: MVVM\n- **网络**: Retrofit + Gson\n- **异步**: Coroutines + Flow\n- **API**: Open-Meteo (免费，无需API Key)\n\n## 项目结构\n\n```\nweather-app/\n├── app/\n│   ├── src/main/\n│   │   ├── kotlin/com/vision/weatherapp/\n│   │   │   ├── data/\n│   │   │   │   ├── api/WeatherApi.kt          # API 接口\n│   │   │   │   ├── model/WeatherModels.kt      # 数据模型\n│   │   │   │   ├── network/NetworkModule.kt   # Retrofit 配置\n│   │   │   │   └── repository/WeatherRepository.kt\n│   │   │   ├── ui/\n│   │   │   │   ├── screens/WeatherScreen.kt    # 主界面\n│   │   │   │   ├── theme/Theme.kt              # 主题\n│   │   │   │   └── viewmodel/WeatherViewModel.kt\n│   │   │   ├── MainActivity.kt\n│   │   │   └── WeatherApp.kt\n│   │   ├── res/                               # 资源文件\n│   │   └── AndroidManifest.xml\n│   └── build.gradle.kts\n├── build.gradle.kts\n├── settings.gradle.kts\n└── gradle.properties\n```\n\n## 快速开始\n\n### 1. 安装 Android Studio\n\n下载并安装 [Android Studio](https://developer.android.com/studio) (推荐最新版本)\n\n### 2. 导入项目\n\n1. 打开 Android Studio\n2. 选择 `Open` 或 `Import Project`\n3. 导航到 `C:\\Users\\qiao\\.openclaw\\workspace\\weather-app`\n4. 点击 `OK` 导入项目\n\n### 3. 构建项目\n\n- **首次打开**: Android Studio 会自动下载 Gradle 依赖\n- **构建 APK**: `Build > Build Bundle(s) / APK(s) > Build APK(s)`\n- **运行**: 连接设备或启动模拟器，点击 `Run` 按钮\n\n### 4. 生成的 APK\n\nAPK 文件将生成在：\n```\napp/build/outputs/apk/debug/app-debug.apk\n```\n\n## API 说明\n\n本项目使用 **Open-Meteo** 免费天气 API：\n- 天气 API: `https://api.open-meteo.com/v1/forecast`\n- Geocoding API: `https://geocoding-api.open-meteo.com/v1/search`\n\n**特点**: \n- ✅ 完全免费\n- ✅ 无需注册/API Key\n- ✅ 支持全球城市\n- ✅ 响应速度快\n\n## 权限说明\n\n- `INTERNET`: 网络访问\n- `ACCESS_FINE_LOCATION`: 精确位置（可选）\n- `ACCESS_COARSE_LOCATION`: 粗略位置（可选）\n\n## 自定义\n\n### 修改默认城市\n\n在 `MainActivity.kt` 中修改：\n```kotlin\n// 默认上海\nviewModel.getWeather(latitude = 31.2304, longitude = 121.4737)\n\n// 例如北京\nviewModel.getWeather(latitude = 39.9042, longitude = 116.4074)\n```\n\n### 更改主题颜色\n\n在 `ui/theme/Theme.kt` 中修改：\n```kotlin\nprivate val SunnyColor = Color(0xFFFFB300)  // 主色调\nprivate val CloudyColor = Color(0xFF90A4AE) // 次要色\nprivate val RainyColor = Color(0xFF5C6BC0)  // 强调色\n```\n\n## 打包发布\n\n### Debug APK\n```bash\n./gradlew assembleDebug\n```\n\n### Release APK (需要签名)\n```bash\n./gradlew assembleRelease\n```\n\n### 生成签名 APK\n\n1. 在 Android Studio 中：`Build > Generate Signed Bundle / APK`\n2. 选择 `APK`\n3. 创建或选择 keystore\n4. 填写签名信息\n5. 点击 `Finish`\n\n## 依赖版本\n\n- **Gradle**: 8.2\n- **Android Gradle Plugin**: 8.2.2\n- **Kotlin**: 1.9.22\n- **Compose BOM**: 2024.01.00\n- **Compile SDK**: 34\n- **Min SDK**: 26\n- **Target SDK**: 34\n\n## 常见问题\n\n**Q: 构建失败怎么办？**\nA: \n1. 检查 Android Studio 是否最新\n2. 尝试 `File > Invalidate Caches / Restart`\n3. 确保网络连接正常（需要下载依赖）\n\n**Q: 模拟器无法启动？**\nA: 确保已安装 HAXM 或启用 Hyper-V，并创建了 x86/x86_64 镜像\n\n**Q: API 调用失败？**\nA: 检查网络连接，Open-Meteo API 目前完全免费且稳定\n\n## 许可证\n\nMIT License\n\n---\n\n**开发者**: Vision AI Assistant  \n**创建时间**: 2026-02-07\n
+# Vision Weather App
+
+一个使用 Kotlin + Jetpack Compose 开发的天气应用程序。
+
+## 功能特点
+
+- 显示实时天气信息（温度、湿度、风速等）
+- 支持城市搜索
+- 自动获取当前位置天气（默认上海）
+- Material Design 3 现代UI设计
+- 支持深色模式
+
+## 技术栈
+
+- **语言**: Kotlin
+- **UI**: Jetpack Compose
+- **架构**: MVVM
+- **网络**: Retrofit + Gson
+- **异步**: Coroutines + Flow
+- **API**: Open-Meteo (免费，无需API Key)
+
+## 项目结构
+
+```
+weather-app/
+├── app/
+│   ├── src/main/
+│   │   ├── kotlin/com/weatherapp/
+│   │   │   ├── data/
+│   │   │   │   ├── api/WeatherApiService.kt
+│   │   │   │   ├── model/WeatherResponse.kt
+│   │   │   │   └── repository/WeatherRepository.kt
+│   │   │   ├── ui/
+│   │   │   │   ├── screens/WeatherScreen.kt
+│   │   │   │   ├── theme/Theme.kt
+│   │   │   │   └── viewmodel/WeatherViewModel.kt
+│   │   │   ├── MainActivity.kt
+│   │   │   └── WeatherApplication.kt
+│   │   └── res/
+│   └── build.gradle.kts
+├── build.gradle.kts
+├── settings.gradle.kts
+└── gradle.properties
+```
+
+## 快速开始
+
+### 1. 安装依赖
+
+确保已安装：
+- JDK 17+
+- Android SDK 34+
+
+### 2. 构建项目
+
+```bash
+# Windows
+gradlew.bat assembleDebug
+
+# Linux/macOS
+./gradlew assembleDebug
+```
+
+### 3. APK 位置
+
+```
+app/build/outputs/apk/debug/app-debug.apk
+```
+
+## API
+
+使用 Open-Meteo 免费天气 API：
+- 天气: `https://api.open-meteo.com/v1/forecast`
+- 城市搜索: `https://geocoding-api.open-meteo.com/v1/search`
+
+## 权限
+
+- INTERNET: 网络访问
+- ACCESS_FINE_LOCATION: 位置（可选）
+
+---
+
+**开发者**: Vision AI Assistant  
+**日期**: 2026-02-07
