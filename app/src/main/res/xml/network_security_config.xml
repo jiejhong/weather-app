@@ -1,0 +1,1 @@
+<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<network-security-config>\n    <domain-config cleartextTrafficPermitted=\"false\">\n        <domain includeSubdomains=\"true\">api.open-meteo.com</domain>\n    </domain-config>\n</network-security-config>\n

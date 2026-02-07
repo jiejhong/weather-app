@@ -1,0 +1,1 @@
+<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<data-extraction-rules>\n    <cloud-backup>\n        <include domain=\"sharedpref\" path=\".\"/>\n        <exclude domain=\"sharedpref\" path=\"device.xml\"/>\n    </cloud-backup>\n</data-extraction-rules>\n
