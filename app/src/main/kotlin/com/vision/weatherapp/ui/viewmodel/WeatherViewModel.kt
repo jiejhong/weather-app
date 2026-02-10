@@ -1,1 +1,112 @@
-package com.vision.weatherapp.ui.viewmodel\n\nimport androidx.lifecycle.ViewModel\nimport androidx.lifecycle.viewModelScope\nimport com.vision.weatherapp.data.model.GeocodingResult\nimport com.vision.weatherapp.data.model.WeatherResponse\nimport com.vision.weatherapp.data.repository.WeatherRepository\nimport kotlinx.coroutines.flow.MutableStateFlow\nimport kotlinx.coroutines.flow.StateFlow\nimport kotlinx.coroutines.flow.asStateFlow\nimport kotlinx.coroutines.launch\n\n/**\n * 天气 App UI 状态\n */\ndata class WeatherUiState(\n    val isLoading: Boolean = false,\n    val weatherResponse: WeatherResponse? = null,\n    val errorMessage: String? = null,\n    val searchResults: List<GeocodingResult> = emptyList(),\n    val searchQuery: String = \"\",\n    val isSearching: Boolean = false\n)\n\n/**\n * 天气 ViewModel\n */\nclass WeatherViewModel(\n    private val repository: WeatherRepository = WeatherRepository()\n) : ViewModel() {\n    \n    private val _uiState = MutableStateFlow(WeatherUiState())\n    val uiState: StateFlow<WeatherUiState> = _uiState.asStateFlow()\n    \n    /**\n     * 获取当前位置天气\n     */\n    fun getWeather(latitude: Double, longitude: Double) {\n        viewModelScope.launch {\n            _uiState.value = _uiState.value.copy(\n                isLoading = true,\n                errorMessage = null\n            )\n            \n            repository.getWeather(latitude, longitude)\n                .onSuccess { response ->\n                    _uiState.value = _uiState.value.copy(\n                        isLoading = false,\n                        weatherResponse = response\n                    )\n                }\n                .onFailure { error ->\n                    _uiState.value = _uiState.value.copy(\n                        isLoading = false,\n                        errorMessage = error.message ?: \"获取天气失败\"\n                    )\n                }\n        }\n    }\n    \n    /**\n     * 搜索城市\n     */\n    fun searchCity(query: String) {\n        if (query.isBlank()) {\n            _uiState.value = _uiState.value.copy(\n                searchResults = emptyList(),\n                searchQuery = \"\"\n            )\n            return\n        }\n        \n        viewModelScope.launch {\n            _uiState.value = _uiState.value.copy(\n                isSearching = true,\n                searchQuery = query\n            )\n            \n            repository.searchCity(query)\n                .onSuccess { results ->\n                    _uiState.value = _uiState.value.copy(\n                        isSearching = false,\n                        searchResults = results\n                    )\n                }\n                .onFailure {\n                    _uiState.value = _uiState.value.copy(\n                        isSearching = false,\n                        searchResults = emptyList()\n                    )\n                }\n        }\n    }\n    \n    /**\n     * 选择城市后获取天气\n     */\n    fun selectCity(result: GeocodingResult) {\n        getWeather(result.latitude, result.longitude)\n        _uiState.value = _uiState.value.copy(\n            searchResults = emptyList(),\n            searchQuery = result.name\n        )\n    }\n    \n    /**\n     * 清除错误\n     */\n    fun clearError() {\n        _uiState.value = _uiState.value.copy(errorMessage = null)\n    }\n}\n
+package com.vision.weatherapp.ui.viewmodel
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.vision.weatherapp.data.model.GeocodingResult
+import com.vision.weatherapp.data.model.WeatherResponse
+import com.vision.weatherapp.data.repository.WeatherRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+
+/**
+ * 天气 App UI 状态
+ */
+data class WeatherUiState(
+    val isLoading: Boolean = false,
+    val weatherResponse: WeatherResponse? = null,
+    val errorMessage: String? = null,
+    val searchResults: List<GeocodingResult> = emptyList(),
+    val searchQuery: String = "",
+    val isSearching: Boolean = false
+)
+
+/**
+ * 天气 ViewModel
+ */
+class WeatherViewModel(
+    private val repository: WeatherRepository = WeatherRepository()
+) : ViewModel() {
+    
+    private val _uiState = MutableStateFlow(WeatherUiState())
+    val uiState: StateFlow<WeatherUiState> = _uiState.asStateFlow()
+    
+    /**
+     * 获取当前位置天气
+     */
+    fun getWeather(latitude: Double, longitude: Double) {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(
+                isLoading = true,
+                errorMessage = null
+            )
+            
+            repository.getWeather(latitude, longitude)
+                .onSuccess { response ->
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false,
+                        weatherResponse = response
+                    )
+                }
+                .onFailure { error ->
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false,
+                        errorMessage = error.message ?: "获取天气失败"
+                    )
+                }
+        }
+    }
+    
+    /**
+     * 搜索城市
+     */
+    fun searchCity(query: String) {
+        if (query.isBlank()) {
+            _uiState.value = _uiState.value.copy(
+                searchResults = emptyList(),
+                searchQuery = ""
+            )
+            return
+        }
+        
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(
+                isSearching = true,
+                searchQuery = query
+            )
+            
+            repository.searchCity(query)
+                .onSuccess { results ->
+                    _uiState.value = _uiState.value.copy(
+                        isSearching = false,
+                        searchResults = results
+                    )
+                }
+                .onFailure {
+                    _uiState.value = _uiState.value.copy(
+                        isSearching = false,
+                        searchResults = emptyList()
+                    )
+                }
+        }
+    }
+    
+    /**
+     * 选择城市后获取天气
+     */
+    fun selectCity(result: GeocodingResult) {
+        getWeather(result.latitude, result.longitude)
+        _uiState.value = _uiState.value.copy(
+            searchResults = emptyList(),
+            searchQuery = result.name
+        )
+    }
+    
+    /**
+     * 清除错误
+     */
+    fun clearError() {
+        _uiState.value = _uiState.value.copy(errorMessage = null)
+    }
+}

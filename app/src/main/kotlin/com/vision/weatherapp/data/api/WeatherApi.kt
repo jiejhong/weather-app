@@ -1,1 +1,29 @@
-package com.vision.weatherapp.data.api\n\nimport com.vision.weatherapp.data.model.GeocodingResponse\nimport com.vision.weatherapp.data.model.WeatherResponse\nimport retrofit2.http.GET\nimport retrofit2.http.Query\n\n/**\n * Open-Meteo 天气 API 接口\n */\ninterface WeatherApi {\n    \n    @GET(\"v1/forecast\")\n    suspend fun getWeather(\n        @Query(\"latitude\") latitude: Double,\n        @Query(\"longitude\") longitude: Double,\n        @Query(\"current_weather\") currentWeather: Boolean = true,\n        @Query(\"temperature_unit\") temperatureUnit: String = \"celsius\",\n        @Query(\"windspeed_unit\") windSpeedUnit: String = \"kmh\"\n    ): WeatherResponse\n    \n    @GET(\"v1/geocoding\")\n    suspend fun searchCity(\n        @Query(\"name\") cityName: String,\n        @Query(\"count\") count: Int = 5,\n        @Query(\"language\") language: String = \"zh\",\n        @Query(\"format\") format: String = \"json\"\n    ): GeocodingResponse\n}\n
+package com.vision.weatherapp.data.api
+
+import com.vision.weatherapp.data.model.GeocodingResponse
+import com.vision.weatherapp.data.model.WeatherResponse
+import retrofit2.http.GET
+import retrofit2.http.Query
+
+/**
+ * Open-Meteo 天气 API 接口
+ */
+interface WeatherApi {
+    
+    @GET("v1/forecast")
+    suspend fun getWeather(
+        @Query("latitude") latitude: Double,
+        @Query("longitude") longitude: Double,
+        @Query("current_weather") currentWeather: Boolean = true,
+        @Query("temperature_unit") temperatureUnit: String = "celsius",
+        @Query("windspeed_unit") windSpeedUnit: String = "kmh"
+    ): WeatherResponse
+    
+    @GET("v1/geocoding")
+    suspend fun searchCity(
+        @Query("name") cityName: String,
+        @Query("count") count: Int = 5,
+        @Query("language") language: String = "zh",
+        @Query("format") format: String = "json"
+    ): GeocodingResponse
+}

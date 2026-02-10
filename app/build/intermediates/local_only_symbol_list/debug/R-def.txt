@@ -1,0 +1,29 @@
+R_DEF: Internal format may change without notice
+local
+color background_dark
+color background_light
+color cloudy
+color rainy
+color sunny
+color sunny_dark
+color surface_dark
+color surface_light
+color text_primary_dark
+color text_primary_light
+drawable ic_launcher_foreground
+mipmap ic_launcher
+mipmap ic_launcher_round
+string app_name
+string error
+string humidity
+string loading
+string no_data
+string refresh
+string retry
+string search_city_hint
+string temperature
+string wind_speed
+style Theme.WeatherApp
+xml backup_rules
+xml data_extraction_rules
+xml network_security_config

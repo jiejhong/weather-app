@@ -1,1 +1,36 @@
-package com.vision.weatherapp.data.network\n\nimport com.vision.weatherapp.data.api.WeatherApi\nimport okhttp3.OkHttpClient\nimport okhttp3.logging.HttpLoggingInterceptor\nimport retrofit2.Retrofit\nimport retrofit2.converter.gson.GsonConverterFactory\nimport java.util.concurrent.TimeUnit\n\n/**\n * 网络模块单例 - 配置 Retrofit\n */\nobject NetworkModule {\n    \n    private const val BASE_URL = \"https://api.open-meteo.com/\"\n    private const val TIMEOUT_SECONDS = 30L\n    \n    private val loggingInterceptor = HttpLoggingInterceptor().apply {\n        level = HttpLoggingInterceptor.Level.BODY\n    }\n    \n    private val okHttpClient = OkHttpClient.Builder()\n        .addInterceptor(loggingInterceptor)\n        .connectTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS)\n        .readTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS)\n        .writeTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS)\n        .build()\n    \n    private val retrofit = Retrofit.Builder()\n        .baseUrl(BASE_URL)\n        .client(okHttpClient)\n        .addConverterFactory(GsonConverterFactory.create())\n        .build()\n    \n    val weatherApi: WeatherApi = retrofit.create(WeatherApi::class.java)\n}\n
+package com.vision.weatherapp.data.network
+
+import com.vision.weatherapp.data.api.WeatherApi
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
+
+/**
+ * 网络模块单例 - 配置 Retrofit
+ */
+object NetworkModule {
+    
+    private const val BASE_URL = "https://api.open-meteo.com/"
+    private const val TIMEOUT_SECONDS = 30L
+    
+    private val loggingInterceptor = HttpLoggingInterceptor().apply {
+        level = HttpLoggingInterceptor.Level.BODY
+    }
+    
+    private val okHttpClient = OkHttpClient.Builder()
+        .addInterceptor(loggingInterceptor)
+        .connectTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS)
+        .readTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS)
+        .writeTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS)
+        .build()
+    
+    private val retrofit = Retrofit.Builder()
+        .baseUrl(BASE_URL)
+        .client(okHttpClient)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+    
+    val weatherApi: WeatherApi = retrofit.create(WeatherApi::class.java)
+}

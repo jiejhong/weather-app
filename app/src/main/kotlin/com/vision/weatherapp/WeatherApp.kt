@@ -1,1 +1,14 @@
-package com.vision.weatherapp\n\nimport android.app.Application\n\n/**\n * Weather Application\n */\nclass WeatherApp : Application() {\n    \n    override fun onCreate() {\n        super.onCreate()\n        // Application 初始化\n    }\n}\n
+package com.vision.weatherapp
+
+import android.app.Application
+
+/**
+ * Weather Application
+ */
+class WeatherApp : Application() {
+    
+    override fun onCreate() {
+        super.onCreate()
+        // Application 初始化
+    }
+}

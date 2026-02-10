@@ -1,1 +1,68 @@
-package com.vision.weatherapp.data.model\n\nimport com.google.gson.annotations.SerializedName\n\n/**\n * Open-Meteo Weather API 响应模型\n */\ndata class WeatherResponse(\n    @SerializedName(\"latitude\")\n    val latitude: Double,\n    \n    @SerializedName(\"longitude\")\n    val longitude: Double,\n    \n    @SerializedName(\"timezone\")\n    val timezone: String,\n    \n    @SerializedName(\"current_weather\")\n    val currentWeather: CurrentWeather?\n)\n\ndata class CurrentWeather(\n    @SerializedName(\"temperature\")\n    val temperature: Double,\n    \n    @SerializedName(\"windspeed\")\n    val windSpeed: Double,\n    \n    @SerializedName(\"winddirection\")\n    val windDirection: Double,\n    \n    @SerializedName(\"weathercode\")\n    val weatherCode: Int,\n    \n    @SerializedName(\"is_day\")\n    val isDay: Int,\n    \n    @SerializedName(\"time\")\n    val time: String\n)\n\n/**\n * Open-Meteo Geocoding API 响应模型\n */\ndata class GeocodingResponse(\n    @SerializedName(\"results\")\n    val results: List<GeocodingResult>?\n)\n\ndata class GeocodingResult(\n    @SerializedName(\"id\")\n    val id: Int,\n    \n    @SerializedName(\"name\")\n    val name: String,\n    \n    @SerializedName(\"latitude\")\n    val latitude: Double,\n    \n    @SerializedName(\"longitude\")\n    val longitude: Double,\n    \n    @SerializedName(\"country\")\n    val country: String,\n    \n    @SerializedName(\"admin1\")\n    val admin1: String?\n)\n
+package com.vision.weatherapp.data.model
+
+import com.google.gson.annotations.SerializedName
+
+/**
+ * Open-Meteo Weather API 响应模型
+ */
+data class WeatherResponse(
+    @SerializedName("latitude")
+    val latitude: Double,
+    
+    @SerializedName("longitude")
+    val longitude: Double,
+    
+    @SerializedName("timezone")
+    val timezone: String,
+    
+    @SerializedName("current_weather")
+    val currentWeather: CurrentWeather?
+)
+
+data class CurrentWeather(
+    @SerializedName("temperature")
+    val temperature: Double,
+    
+    @SerializedName("windspeed")
+    val windSpeed: Double,
+    
+    @SerializedName("winddirection")
+    val windDirection: Double,
+    
+    @SerializedName("weathercode")
+    val weatherCode: Int,
+    
+    @SerializedName("is_day")
+    val isDay: Int,
+    
+    @SerializedName("time")
+    val time: String
+)
+
+/**
+ * Open-Meteo Geocoding API 响应模型
+ */
+data class GeocodingResponse(
+    @SerializedName("results")
+    val results: List<GeocodingResult>?
+)
+
+data class GeocodingResult(
+    @SerializedName("id")
+    val id: Int,
+    
+    @SerializedName("name")
+    val name: String,
+    
+    @SerializedName("latitude")
+    val latitude: Double,
+    
+    @SerializedName("longitude")
+    val longitude: Double,
+    
+    @SerializedName("country")
+    val country: String,
+    
+    @SerializedName("admin1")
+    val admin1: String?
+)

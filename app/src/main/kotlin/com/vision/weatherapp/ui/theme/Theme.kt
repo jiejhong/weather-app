@@ -1,1 +1,78 @@
-package com.vision.weatherapp.ui.theme\n\nimport android.app.Activity\nimport android.os.Build\nimport androidx.compose.foundation.isSystemInDarkTheme\nimport androidx.compose.material3.MaterialTheme\nimport androidx.compose.material3.darkColorScheme\nimport androidx.compose.material3.dynamicDarkColorScheme\nimport androidx.compose.material3.dynamicLightColorScheme\nimport androidx.compose.material3.lightColorScheme\nimport androidx.compose.runtime.Composable\nimport androidx.compose.runtime.SideEffect\nimport androidx.compose.ui.graphics.Color\nimport androidx.compose.ui.graphics.toArgb\nimport androidx.compose.ui.platform.LocalContext\nimport androidx.compose.ui.platform.LocalView\nimport androidx.core.view.WindowCompat\n\n// 天气主题颜色\nprivate val SunnyColor = Color(0xFFFFB300)\nprivate val CloudyColor = Color(0xFF90A4AE)\nprivate val RainyColor = Color(0xFF5C6BC0)\n\nprivate val DarkColorScheme = darkColorScheme(\n    primary = SunnyColor,\n    secondary = CloudyColor,\n    tertiary = RainyColor,\n    background = Color(0xFF121212),\n    surface = Color(0xFF1E1E1E),\n    onPrimary = Color.White,\n    onSecondary = Color.White,\n    onTertiary = Color.White,\n    onBackground = Color.White,\n    onSurface = Color.White\n)\n\nprivate val LightColorScheme = lightColorScheme(\n    primary = SunnyColor,\n    secondary = CloudyColor,\n    tertiary = RainyColor,\n    background = Color(0xFFF5F5F5),\n    surface = Color.White,\n    onPrimary = Color.Black,\n    onSecondary = Color.Black,\n    onTertiary = Color.White,\n    onBackground = Color.Black,\n    onSurface = Color.Black\n)\n\n@Composable\nfun WeatherAppTheme(\n    darkTheme: Boolean = isSystemInDarkTheme(),\n    dynamicColor: Boolean = true,\n    content: @Composable () -> Unit\n) {\n    val colorScheme = when {\n        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {\n            val context = LocalContext.current\n            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)\n        }\n        darkTheme -> DarkColorScheme\n        else -> LightColorScheme\n    }\n    \n    val view = LocalView.current\n    if (!view.isInEditMode) {\n        SideEffect {\n            val window = (view.context as Activity).window\n            window.statusBarColor = colorScheme.primary.toArgb()\n            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme\n        }\n    }\n\n    MaterialTheme(\n        colorScheme = colorScheme,\n        content = content\n    )\n}\n
+package com.vision.weatherapp.ui.theme
+
+import android.app.Activity
+import android.os.Build
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.dynamicDarkColorScheme
+import androidx.compose.material3.dynamicLightColorScheme
+import androidx.compose.material3.lightColorScheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowCompat
+
+// 天气主题颜色
+private val SunnyColor = Color(0xFFFFB300)
+private val CloudyColor = Color(0xFF90A4AE)
+private val RainyColor = Color(0xFF5C6BC0)
+
+private val DarkColorScheme = darkColorScheme(
+    primary = SunnyColor,
+    secondary = CloudyColor,
+    tertiary = RainyColor,
+    background = Color(0xFF121212),
+    surface = Color(0xFF1E1E1E),
+    onPrimary = Color.White,
+    onSecondary = Color.White,
+    onTertiary = Color.White,
+    onBackground = Color.White,
+    onSurface = Color.White
+)
+
+private val LightColorScheme = lightColorScheme(
+    primary = SunnyColor,
+    secondary = CloudyColor,
+    tertiary = RainyColor,
+    background = Color(0xFFF5F5F5),
+    surface = Color.White,
+    onPrimary = Color.Black,
+    onSecondary = Color.Black,
+    onTertiary = Color.White,
+    onBackground = Color.Black,
+    onSurface = Color.Black
+)
+
+@Composable
+fun WeatherAppTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    dynamicColor: Boolean = true,
+    content: @Composable () -> Unit
+) {
+    val colorScheme = when {
+        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+            val context = LocalContext.current
+            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+        }
+        darkTheme -> DarkColorScheme
+        else -> LightColorScheme
+    }
+    
+    val view = LocalView.current
+    if (!view.isInEditMode) {
+        SideEffect {
+            val window = (view.context as Activity).window
+            window.statusBarColor = colorScheme.primary.toArgb()
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
+        }
+    }
+
+    MaterialTheme(
+        colorScheme = colorScheme,
+        content = content
+    )
+}
