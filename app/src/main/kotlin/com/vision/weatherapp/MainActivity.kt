@@ -1,8 +1,10 @@
 package com.vision.weatherapp
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
@@ -12,6 +14,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
+import com.google.android.gms.tasks.CancellationTokenSource
 import com.vision.weatherapp.ui.screens.WeatherScreen
 import com.vision.weatherapp.ui.theme.WeatherAppTheme
 import com.vision.weatherapp.ui.viewmodel.WeatherViewModel
@@ -19,6 +25,7 @@ import com.vision.weatherapp.ui.viewmodel.WeatherViewModel
 class MainActivity : ComponentActivity() {
     
     private lateinit var viewModel: WeatherViewModel
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
     
     private val locationPermissionRequest = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
@@ -30,11 +37,18 @@ class MainActivity : ComponentActivity() {
             permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
                 getCurrentLocation()
             }
+            else -> {
+                // 用户拒绝权限，使用默认位置并提示
+                Toast.makeText(this, "位置权限被拒绝，将使用默认位置", Toast.LENGTH_SHORT).show()
+                getDefaultLocation()
+            }
         }
     }
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         
         viewModel = ViewModelProvider(this)[WeatherViewModel::class.java]
         
@@ -72,9 +86,44 @@ class MainActivity : ComponentActivity() {
         }
     }
     
+    @SuppressLint("MissingPermission")
     private fun getCurrentLocation() {
-        // 这里简化处理，使用默认坐标（上海）
-        // 实际项目中应该使用 LocationManager 获取真实位置
+        val cancellationToken = CancellationTokenSource()
+        
+        fusedLocationClient.getCurrentLocation(
+            Priority.PRIORITY_HIGH_ACCURACY,
+            cancellationToken.token
+        ).addOnSuccessListener { location ->
+            if (location != null) {
+                // 获取成功，使用实际位置获取天气
+                viewModel.getWeather(latitude = location.latitude, longitude = location.longitude)
+            } else {
+                // 无法获取位置，尝试获取最后已知位置
+                getLastKnownLocation()
+            }
+        }.addOnFailureListener { e ->
+            Toast.makeText(this, "获取位置失败: ${e.message}", Toast.LENGTH_SHORT).show()
+            getDefaultLocation()
+        }
+    }
+    
+    @SuppressLint("MissingPermission")
+    private fun getLastKnownLocation() {
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { location ->
+                if (location != null) {
+                    viewModel.getWeather(latitude = location.latitude, longitude = location.longitude)
+                } else {
+                    getDefaultLocation()
+                }
+            }
+            .addOnFailureListener {
+                getDefaultLocation()
+            }
+    }
+    
+    private fun getDefaultLocation() {
+        // 使用默认位置（上海）作为后备
         viewModel.getWeather(latitude = 31.2304, longitude = 121.4737)
     }
 }

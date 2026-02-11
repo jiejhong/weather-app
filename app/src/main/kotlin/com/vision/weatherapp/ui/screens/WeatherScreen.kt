@@ -268,7 +268,7 @@ fun LoadingContent() {
         ) {
             CircularProgressIndicator()
             Spacer(modifier = Modifier.height(16.dp))
-            Text("加载天气中...")
+            Text("正在获取位置和天气...")
         }
     }
 }
